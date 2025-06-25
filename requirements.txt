@@ -5,3 +5,4 @@ scikit-learn>=1.0.0
 h5py>=3.1.0
 tqdm>=4.62.0
 iopath>=0.1.0 
+git+https://github.com/facebookresearch/hypernymysuite.git
