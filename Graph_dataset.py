@@ -1,3 +1,4 @@
+# %%
 import os
 import re
 import pandas as pd
@@ -5,10 +6,12 @@ import numpy as np
 import torch
 from torch.utils.data import DataLoader
 import pandas as pd
+import sys
+sys.path.append('./poincare-embeddings')
 
-%%bash
-mkdir -p hype
-cat > hype/graph_dataset_vectors.py << 'PYCODE'
+# %%bash
+# mkdir -p hype
+# cat > hype/graph_dataset_vectors.py << 'PYCODE'
 import torch
 import numpy as np
 from torch.utils.data import IterableDataset
@@ -83,11 +86,11 @@ class VectorBatchedDataset(IterableDataset):
 
     def __len__(self):
         return int(np.ceil(len(self.idx)/float(self.batch_size)))
-PYCODE
+# PYCODE
 
 
 # new cell
-
+# %%
 # --- Cell 4: Load mammal embeddings & filtered edges, build emb_vectors + idx_array + weights ---
 
 import pandas as pd
@@ -96,7 +99,7 @@ import numpy as np
 # 1) Load the unique set of mammal noun embeddings
 #    (this comes from your df_mammals screenshot: 1180 rows × 2 columns)
 df_mammals = pd.read_csv(
-    "/content/poincare-embeddings/wordnet/mammals_embedding.csv",
+    "Wordnet/mammals_embedding.csv",
     dtype={"noun_id": str, "embedding": str},
     low_memory=False
 )
@@ -125,7 +128,7 @@ print(f"Loaded {len(nodes)} unique mammal nodes, embedding dim = {D}")
 
 # 2) Load the filtered edges (many repeats of noun IDs)
 df_filtered = pd.read_csv(
-    "/content/poincare-embeddings/wordnet/mammal_closure.csv",
+    "Wordnet/mammal_closure.csv",
     dtype={"id1": str, "id2": str, "weight": float}
 )
 
@@ -141,3 +144,28 @@ print(f"Loaded {len(idx_array)} edges (with repeats)")
 weights = df_filtered["weight"].to_numpy(dtype=np.float64)
 
 # now idx_array, emb_vectors, weights are ready for VectorBatchedDataset
+# %%
+from hype.graph_dataset_vectors import VectorBatchedDataset
+from torch.utils.data import DataLoader
+
+ds = VectorBatchedDataset(
+    idx=idx_array,
+    embeddings=emb_vectors,
+    weights=weights,
+    nnegs=10,
+    batch_size=32,
+    burnin=False,
+    sample_dampening=0.75
+)
+loader = DataLoader(ds, batch_size=None, num_workers=0)
+# %%
+idx_array
+# %%
+df_mammals["emb_vec"]
+# %%
+inputs, targets = next(iter(loader))
+# %%
+inputs
+# %%
+targets
+# %%

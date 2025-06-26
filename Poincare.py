@@ -1,3 +1,4 @@
+# %%
 import sys
 sys.path.append("/content/poincare-embeddings")
 
@@ -7,6 +8,7 @@ from torch.autograd import Function
 from hype.manifolds.euclidean import EuclideanManifold
 import numpy as np
 
+# %%
 class PoincareManifold(EuclideanManifold):
     def __init__(self, eps=1e-5, K=None, **kwargs):
         self.eps = eps
@@ -49,7 +51,7 @@ class PoincareManifold(EuclideanManifold):
         return d_p
 
 
-# new cell
+# %%
 
 class Distance(torch.autograd.Function):
     @staticmethod

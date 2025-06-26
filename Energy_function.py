@@ -1,3 +1,4 @@
+# %%
 class EnergyFunction(torch.nn.Module):  # compute distance or score between vectors using curved space
     def __init__(self, manifold, in_dim, emb_dem, size=None, sparse=False, **kwargs):
         super().__init__()
@@ -35,7 +36,7 @@ class EnergyFunction(torch.nn.Module):  # compute distance or score between vect
         raise NotImplementedError
 
 
-# new cell
+# %%
 
 class DistanceEnergyFunction(EnergyFunction): #uses distance between vectors to measure how related they are
 
@@ -45,7 +46,7 @@ class DistanceEnergyFunction(EnergyFunction): #uses distance between vectors to 
   def loss(self, input_scores, target_labels, **kwargs):
     return F.cross_entropy(input_scores.neg(), target_labels)
   
-# new cell
+# %%
 
 # Not used - but keep incase
 
@@ -66,7 +67,7 @@ class EntailmentConeEnergyFunction(EnergyFunction):
       return loss / input_scores.numel()  # Normalize by total number of scores
 
 
-# new cell
+# %%
 
 #!/usr/bin/env python3
 # Copyright (c) 2018-present, Facebook, Inc.
