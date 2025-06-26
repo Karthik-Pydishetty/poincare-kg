@@ -209,7 +209,7 @@ def eval_reconstruction(adj, model, all_vectors, k_cutoffs = [1,5,10], workers=1
                 nranks = np.sum(nranks)
                 ap_scores = np.sum(ap_scores)
                 iters = np.sum(iters)
-                hits_k = {k: np.sum([h[k] for h in hits_dicts]) / iters for k in k_cutoffs}
+                hits_k = {k: np.sum([h[k] for h in hits_dict]) / iters for k in k_cutoffs}
 
         else:
             ranksum, nranks, ap_scores, iters, hits_k = reconstruction_worker(
@@ -388,9 +388,29 @@ def predict_many(model, hypo, hyper):
     dists = model.energy(hypo_e, hyper_e)             # Reshaping allows for N x M result
 
     # Set equal elements to be infinitly far away
-    if hypo_vecs.shape[0] == hyper_vecs.shape[0]:
-        mask_mat = th.eye(hypo_vecs.size(0), dtype=th.float32, device=device)
+    if hypo_t.shape[0] == hyper_t.shape[0]:
+        mask_mat = th.eye(hypo_t.size(0), dtype=th.float32, device=device)
         dists = th.where(mask_mat == 1, th.full_like(dists, 1e10), dists)
 
     # Might have to change to be not negative
     return -dists.detach().numpy()
+
+
+# Code for Link Prediction
+
+file_path = # File Path
+
+adj = load_adjacency_matrix(file_path)
+
+triples = []
+
+# Builds out triples and assumes relation is 0
+for h, neighbors in adj.items():
+    for t in neighbors:
+        triples.append((h, 0, t))
+
+triples = th.tensor(triples, dtype=th.long)
+
+n_entities = int(th.max(th.cat([triples[:, 0], triples[:, 2]])) + 1)
+n_relations = int(th.max(triples[:, 1]) + 1) # Should be 1
+
