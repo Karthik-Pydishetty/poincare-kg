@@ -352,9 +352,7 @@ def eval_reconstruction_slow(adj, model, all_vectors, k_cutoffs = [1,5,10]):
     return np.mean(ranks), np.mean(ap_scores), hits_k
 
 
-# new cell
-
-# Moved from HyperHypoEval
+# Moved from HyperHypoEval - not currently used but could be usefull
 def predict_many(model, hypo, hyper):
     '''
     Predicts hypernym hyponym pairings
