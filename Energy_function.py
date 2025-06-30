@@ -1,4 +1,12 @@
 # %%
+
+import torch
+import torch.nn.functional as F
+import numpy as np
+from hype.manifolds import manifolds  # Import manifolds from hype package
+import torch.nn as nn
+import torch.optim as optim
+
 class EnergyFunction(torch.nn.Module):  # compute distance or score between vectors using curved space
     def __init__(self, manifold, in_dim, emb_dim, size=None, sparse=False, **kwargs):
         super().__init__()

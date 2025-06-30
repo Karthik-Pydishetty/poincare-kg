@@ -3,6 +3,8 @@ from hype import manifolds
 
 # %%
 #model = DistanceEnergyFunction(manifolds.PoincareManifold(eps=1e-2), in_dim=384, emb_dim=10, train_size=1180)
+from Energy_function import DistanceEnergyFunction
+
 model = DistanceEnergyFunction(manifolds.EuclideanManifold(max_norm=1.0), in_dim=384, emb_dim=30, train_size=1180)
 
 # %%
