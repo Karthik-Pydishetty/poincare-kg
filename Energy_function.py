@@ -1,8 +1,8 @@
 # %%
 class EnergyFunction(torch.nn.Module):  # compute distance or score between vectors using curved space
-    def __init__(self, manifold, in_dim, emb_dem, size=None, sparse=False, **kwargs):
+    def __init__(self, manifold, in_dim, emb_dim, size=None, sparse=False, **kwargs):
         super().__init__()
-        self.manifold = manifold
+        self.manifold = manifold 
         self.embedding_dim = emb_dim
 
         self.dense_layer = torch.nn.Linear(in_dim, emb_dim)  # initialized in forward based on input shape
